@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!--
+      iPad 等比缩放脚本：
+      检测到平板尺寸（768–1279 CSS px）时，将设计宽度固定为 1280px，
+      并计算 initial-scale 使其等比缩小以完整显示 PC 布局。
+      手机 (<768px) 和桌面 (≥1280px) 保持原始响应式 viewport。
+    -->
+    <script>
+      (function () {
+        var DESIGN_WIDTH = 1280;
+        var meta = document.querySelector('meta[name="viewport"]');
+
+        function applyScale() {
+          // 短边作为设备宽度判断依据（排除横竖屏干扰）
+          var portrait = Math.min(screen.width, screen.height);
+          var currentW = window.innerWidth || screen.width;
+
+          if (portrait >= 768 && portrait < DESIGN_WIDTH) {
+            // iPad：当前视口宽度 < 设计宽度时等比缩小
+            var scale = Math.min(currentW / DESIGN_WIDTH, 1).toFixed(4);
+            meta.setAttribute(
+              'content',
+              'width=' + DESIGN_WIDTH +
+              ', initial-scale=' + scale +
+              ', minimum-scale=0.1' +
+              ', maximum-scale=5' +
+              ', viewport-fit=cover'
+            );
+          } else {
+            // 手机 / 桌面：正常响应式
+            meta.setAttribute(
+              'content',
+              'width=device-width, initial-scale=1, viewport-fit=cover'
+            );
+          }
+        }
+
+        applyScale();
+        window.addEventListener('resize', function () { setTimeout(applyScale, 50); });
+        window.addEventListener('orientationchange', function () { setTimeout(applyScale, 120); });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

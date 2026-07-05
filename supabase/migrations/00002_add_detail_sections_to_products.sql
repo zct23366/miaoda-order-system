@@ -1,0 +1,1 @@
+ALTER TABLE products ADD COLUMN IF NOT EXISTS detail_sections jsonb DEFAULT '[]'::jsonb;

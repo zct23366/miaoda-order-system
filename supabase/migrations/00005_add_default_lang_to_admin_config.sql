@@ -1,0 +1,1 @@
+ALTER TABLE admin_config ADD COLUMN IF NOT EXISTS default_lang VARCHAR(4) NOT NULL DEFAULT 'zh';
